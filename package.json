@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/ClayBenson94/GoblinBot-Discord/issues"
   },
-  "homepage": "https://github.com/ClayBenson94/GoblinBot-Discord#readme"
+  "homepage": "https://github.com/ClayBenson94/GoblinBot-Discord#readme",
+  "devDependencies": {
+    "eslint": "^4.9.0"
+  },
+  "dependencies": {
+    "discord.js": "^11.2.1"
+  }
 }
