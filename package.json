@@ -4,6 +4,8 @@
   "description": "Discord bot by PiercingGoblin",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index.js",
+    "debug": "node --inspect=9229 src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +22,7 @@
     "eslint": "^4.9.0"
   },
   "dependencies": {
-    "discord.js": "^11.2.1"
+    "discord.js": "^11.2.1",
+    "dotenv": "^4.0.0"
   }
 }
