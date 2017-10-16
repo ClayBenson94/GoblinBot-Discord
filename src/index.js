@@ -15,6 +15,9 @@ client.on('message', msg => {
     if (msg.content === 'delete') {
         clientHandlers.deleteMessage(msg);
     }
+    if (msg.content === '/join') {
+        clientHandlers.join(msg);
+    }
 });
 
 client.login(process.env.LOGIN_TOKEN);
