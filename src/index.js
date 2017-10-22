@@ -1,5 +1,5 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
+const client = global.client = new Discord.Client();
 const clientHandlers = require('./client-handlers');
 
 require('dotenv').config();
@@ -9,14 +9,23 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
-    if (msg.content === 'who is a baby boy?') {
-        clientHandlers.babyBoy(msg);
-    } 
-    if (msg.content === 'delete') {
-        clientHandlers.deleteMessage(msg);
-    }
-    if (msg.content === '/join') {
-        clientHandlers.join(msg);
+    const splitCommand = msg.content.split(" ");
+    if (splitCommand[0].toLowerCase() === "/gb") {
+        const content = splitCommand.splice(1,splitCommand.length).join(" ");
+        
+        if (content === 'babyboy') {
+            clientHandlers.playFile(msg, 'babyboy.wav', .6, true);
+        }
+        if (content === '4d3d3d3') {
+            clientHandlers.playFile(msg, '4d3d3d3.wav', .6);
+        }
+        if (content === 'bot') {
+            clientHandlers.makeBotInvite(msg);
+        }
+    } else {
+        if (msg.content === 'who is a baby boy?') {
+            clientHandlers.babyBoy(msg);
+        } 
     }
 });
 
