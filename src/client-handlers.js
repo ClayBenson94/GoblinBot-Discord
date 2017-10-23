@@ -19,6 +19,20 @@ function makeBotInvite(msg) {
     });
 }
 
+function helpMessage(msg) {
+    msg.member.createDM().then((dm) => {
+        dm.send(`
+Usage: /gm [options] [command]
+Options:
+
+\t-h, --help: Display this help message
+\t\t\`/gb help\`,\`/gb -h\`,\`/gb --help\`
+\t-c <id>, --channel <id>: If using a voice command, the voice channel in which to play the command.
+\t\t\`/gb -c 335877899863457793 babyboy\`
+        `);
+    });
+}
+
 function playFile(msg, fileName, volume = 1, deleteSourceMessage = true, channelToJoin) {
     if (deleteSourceMessage) {
         msg.delete()
@@ -64,5 +78,6 @@ function playFile(msg, fileName, volume = 1, deleteSourceMessage = true, channel
 module.exports = {
     babyBoy,
     makeBotInvite,
+    helpMessage,
     playFile
 };
