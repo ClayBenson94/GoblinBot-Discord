@@ -3,6 +3,7 @@ const client = global.client = new Discord.Client();
 const clientHandlers = require('./client-handlers');
 const minimist = require('minimist');
 const stringArgv = require('string-argv');
+const fs = require('fs');
 
 require('dotenv').config();
 
@@ -27,12 +28,13 @@ client.on('message', msg => {
 
 
         //Voice commands
-        if (command === 'babyboy') {
-            clientHandlers.playFile(msg, 'babyboy.wav', .6, true, argv.channel);
-        }
-        if (command === '4d3d3d3') {
-            clientHandlers.playFile(msg, '4d3d3d3.wav', .6, true, argv.channel);
-        }
+        fs.readdir('./media/audio/', (err, files) => {
+            for (const file of files) {
+                if (new RegExp(`${command}\..*`).test(file)) {
+                    return clientHandlers.playFile(msg, file, .6, true, argv.channel);
+                }
+            }
+        });
 
         //Other commands
         if (command === 'help' || argv.help) {

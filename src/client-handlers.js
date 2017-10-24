@@ -1,4 +1,4 @@
-const path = require('path');
+const fs = require('fs');
 const client = global.client;
 const userIds = {
     PiercingGoblin: '179307528079802369',
@@ -20,7 +20,7 @@ function makeBotInvite(msg) {
 }
 
 function helpMessage(msg) {
-    msg.member.createDM().then((dm) => {
+    msg.author.createDM().then((dm) => {
         dm.send(`
 Usage: /gm [options] [command]
 Options:
@@ -29,12 +29,12 @@ Options:
 \t\t\`/gb help\`,\`/gb -h\`,\`/gb --help\`
 \t-c <id>, --channel <id>: If using a voice command, the voice channel in which to play the command.
 \t\t\`/gb -c 335877899863457793 babyboy\`
-        `);
+`);
     });
 }
 
 function playFile(msg, fileName, volume = 1, deleteSourceMessage = true, channelToJoin) {
-    if (deleteSourceMessage) {
+    if (deleteSourceMessage && msg.member) {
         msg.delete()
             .catch((err) => {
                 if (err.code === 50013) {
@@ -49,30 +49,33 @@ function playFile(msg, fileName, volume = 1, deleteSourceMessage = true, channel
     if (channelToJoin) {
         voiceChannel = client.channels.get(channelToJoin);
         if (!voiceChannel) {
-            msg.member.createDM().then((dm) => {
+            return msg.author.createDM().then((dm) => {
                 dm.send(`You specified an invalid channel ID! ${channelToJoin} is not a valid channel!`);
             });
         }
-    } else if (msg.member && msg.member.voiceChannel) {
-        voiceChannel = msg.member.voiceChannel;
+    } else {
+        voiceChannel = msg.client.channels.find((channel) => {
+            return channel.type === 'voice' && channel.members.some((member) => {
+                return member.id === msg.author.id;
+            });
+        });
+        // voiceChannel = msg.member.voiceChannel;
         if (!voiceChannel) {
-            msg.member.createDM().then((dm) => {
-                dm.send('You must be in a voice hannel in order to use voice commands!');
+            return msg.author.createDM().then((dm) => {
+                dm.send(`You must be in a voice channel in order to use voice commands, or specify a channel ID to use with \`/gb -c <id> <command>\``);
             });
         }
     }
 
-    if (voiceChannel) {
-        voiceChannel.join()
-            .then(connection => {
-                const dispatcher = connection.playFile(path.resolve(`./media/audio/${fileName}`));
-                dispatcher.setVolume(volume);
-                dispatcher.on('end', () => {
-                    voiceChannel.leave();
-                });
-            })
-            .catch(console.log);
-    }
+    voiceChannel.join()
+        .then(connection => {
+            const dispatcher = connection.playFile(`./media/audio/${fileName}`);
+            dispatcher.setVolume(volume);
+            dispatcher.on('end', () => {
+                voiceChannel.leave();
+            });
+        })
+        .catch(console.log);
 }
 
 module.exports = {
