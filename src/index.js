@@ -19,6 +19,7 @@ client.on('message', msg => {
         const argv = minimist(args, {
             alias: {
                 'c': 'channel',
+                'u': 'user',
                 'h': 'help'
             },
             string: ['c']
@@ -26,12 +27,12 @@ client.on('message', msg => {
 
         const command = argv._[0];
 
-
-        //Voice commands
+        //Dynamic Voice commands
         fs.readdir('./media/audio/', (err, files) => {
             for (const file of files) {
                 if (new RegExp(`${command}\..*`).test(file)) {
-                    return clientHandlers.playFile(msg, file, .6, true, argv.channel);
+                    clientHandlers.deleteMessage(msg);
+                    return clientHandlers.playFile(msg, file, .6, argv.channel, argv.user);
                 }
             }
         });
@@ -42,6 +43,9 @@ client.on('message', msg => {
         }
         if (command === 'bot') {
             clientHandlers.makeBotInvite(msg);
+        }
+        if (command === 'conspiracy') {
+            clientHandlers.conspiracy(msg, argv.channel, argv.user);
         }
     } else {
         if (msg.content === 'who is a baby boy?') {

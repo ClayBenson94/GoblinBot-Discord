@@ -25,6 +25,7 @@
     "discord.js": "^11.2.1",
     "dotenv": "^4.0.0",
     "ffmpeg-binaries": "^3.2.2-3",
+    "lodash": "^4.17.4",
     "minimist": "^1.2.0",
     "node-opus": "^0.2.7",
     "string-argv": "0.0.2"
