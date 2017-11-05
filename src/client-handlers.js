@@ -22,17 +22,79 @@ function makeBotInvite(msg) {
 
 function helpMessage(msg) {
     msg.author.createDM().then((dm) => {
-        dm.send(`
-Usage: /gb [options] [command]
-Options:
+        dm.send(
+            {
+                embed: {
+                    color: 0xFFFF00,
+                    timestamp: new Date(),
+                    footer: {
+                        icon_url: client.user.avatarURL,
+                        text: "GoblinBot"
+                    },
+                    thumbnail: {
+                        "url": client.user.avatarURL
+                    },
+                    author: {
+                        name: "GoblinBot Help"
+                    },
+                    fields: [
+                        {
+                            name: "`/gb <help | -h | --help>`",
+                            value: "Get a DM with this help message"
+                        },
+                        {
+                            name: "`/gb bot`",
+                            value: "Get an invite code to use this bot in other servers"
+                        },
+                        {
+                            name: "/gb [options] <voiceCommand>",
+                            value: "Play a voice command in the voice channel you're currently in. See `/gb voiceOptions`"
+                        },
+                        {
+                            name: "/gb <voiceOptions>",
+                            value: "Get a list of options to use with voice commands"
+                        },
+                        {
+                            name: "/gb [options] <conspiracy>",
+                            value: "They're onto us... See `/gb voiceOptions`"
+                        }
+                    ]
+                }
+            }
+        );
+    });
+}
 
-\t-h, --help: Display this help message
-\t\t\`/gb help\`,\`/gb -h\`,\`/gb --help\`
-\t-c <id>, --channel <id>: If using a voice command, the voice channel in which to play the audio.
-\t\t\`/gb -c 335877899863457793 babyboy\`
-\t-u <name|id>, --user <name|id>: If using a voice command, the user to find & play the audio for.
-\t\t\`/gb -u PiercingGoblin babyboy\`
-`);
+function voiceOptions(msg) {
+    msg.author.createDM().then((dm) => {
+        dm.send(
+            {
+                embed: {
+                    color: 0xFFFF00,
+                    timestamp: new Date(),
+                    footer: {
+                        icon_url: client.user.avatarURL,
+                        text: "GoblinBot"
+                    },
+                    thumbnail: {
+                        "url": client.user.avatarURL
+                    },
+                    author: {
+                        name: "GoblinBot Voice Options"
+                    },
+                    fields: [
+                        {
+                            name: "-c | --channel",
+                            value: "The channel in which to play the voice command"
+                        },
+                        {
+                            name: "-u | --user",
+                            value: "Find a user and play the voice command in their voice channel"
+                        }
+                    ]
+                }
+            }
+        );
     });
 }
 
@@ -108,5 +170,6 @@ module.exports = {
     helpMessage,
     playFile,
     deleteMessage,
-    conspiracy
+    conspiracy,
+    voiceOptions
 };

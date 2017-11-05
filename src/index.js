@@ -12,6 +12,9 @@ client.on('ready', () => {
 });
 
 client.on('message', msg => {
+    if (msg.author.bot) {
+        return;
+    }
     const splitCommand = msg.content.split(" ");
     if (splitCommand[0].toLowerCase() === "/gb") {
         const content = splitCommand.splice(1,splitCommand.length).join(" ");
@@ -25,7 +28,10 @@ client.on('message', msg => {
             string: ['c']
         });
 
-        const command = argv._[0];
+        let command = argv._[0];
+        if (command) {
+            command = command.toLowerCase();
+        }
 
         //Dynamic Voice commands
         fs.readdir('./media/audio/', (err, files) => {
@@ -40,6 +46,9 @@ client.on('message', msg => {
         //Other commands
         if (command === 'help' || argv.help) {
             clientHandlers.helpMessage(msg);
+        }
+        if (command === 'voiceoptions') {
+            clientHandlers.voiceOptions(msg);
         }
         if (command === 'bot') {
             clientHandlers.makeBotInvite(msg);
